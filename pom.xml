@@ -4,7 +4,7 @@
 
     <groupId>com.github.likeabook</groupId>
     <artifactId>simple-web-server</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://maven.apache.org</url>
@@ -16,6 +16,20 @@
         <url>https://github.com/likeabook/simple-web-server</url>
         <tag>v${project.version}</tag>
     </scm>
+
+    <developers>
+        <developer>
+            <name>liujiasheng</name>
+            <email>likeabook@163.com</email>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
