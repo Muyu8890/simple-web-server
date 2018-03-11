@@ -1,22 +1,11 @@
 package com.github.likeabook.webserver.exception;
 
-/**
- * 业务异常的基础类
-
- * @description
-
- * @author 刘加胜
-
- * 2015年10月12日
-
- */
 public class BusinessException extends Exception implements BaseException {
 
     private Enum errorEnum;
     private int errorCode;
     private String errorMessage;
     private Object errorResult;
-//    private Exception e;
 
     public BusinessException(Enum errorEnum){
         ExceptionUtils.setExceptionParam(this, errorEnum);
@@ -49,12 +38,6 @@ public class BusinessException extends Exception implements BaseException {
     public Object getErrorResult() {
         return errorResult;
     }
-
-//    @Override
-//    public Exception getE() {
-//        return e;
-//    }
-
 
     @Override
     public Enum getErrorEnum() {
