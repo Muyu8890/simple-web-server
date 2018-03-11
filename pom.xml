@@ -8,6 +8,14 @@
     <packaging>jar</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
     <url>http://maven.apache.org</url>
+    <description>simple web server</description>
+
+    <scm>
+        <connection>scm:git:https://github.com/likeabook/simple-web-server.git</connection>
+        <developerConnection>scm:git:https://github.com/likeabook/simple-web-server.git</developerConnection>
+        <url>https://github.com/likeabook/simple-web-server</url>
+        <tag>v${project.version}</tag>
+    </scm>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -116,13 +124,6 @@
 
 
     </dependencies>
-
-    <scm>
-        <connection>scm:git:https://github.com/likeabook/simple-web-server.git</connection>
-        <developerConnection>scm:git:https://github.com/likeabook/simple-web-server.git</developerConnection>
-        <url>https://github.com/likeabook/simple-web-server</url>
-        <tag>v${project.version}</tag>
-    </scm>
 
     <distributionManagement>
         <snapshotRepository>
