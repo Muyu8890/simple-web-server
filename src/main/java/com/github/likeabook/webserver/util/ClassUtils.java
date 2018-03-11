@@ -36,7 +36,6 @@ public class ClassUtils {
     /**
      * 从包package中获取所有的Class
      *
-     * @return
      */
     private static List<Class<?>> getClasses(String packageName) {
 
@@ -120,10 +119,6 @@ public class ClassUtils {
     /**
      * 以文件的形式来获取包下的所有Class
      *
-     * @param packageName
-     * @param packagePath
-     * @param recursive
-     * @param classes
      */
     private static void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive, List<Class<?>> classes) {
         // 获取此包的目录 建立一个File

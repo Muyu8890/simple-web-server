@@ -2,13 +2,8 @@ package com.github.likeabook.webserver.exception;
 
 /**
  * 业务异常的基础类
-
- * @description
-
  * @author 刘加胜
-
  * 2015年10月12日
-
  */
 public class BusinessRuntimeException extends RuntimeException implements BaseException {
 
@@ -16,7 +11,6 @@ public class BusinessRuntimeException extends RuntimeException implements BaseEx
     private int errorCode;
     private String errorMessage;
     private Object errorResult;
-//    private Exception e;
 
     public BusinessRuntimeException(Enum errorEnum){
         ExceptionUtils.setExceptionParam(this, errorEnum);

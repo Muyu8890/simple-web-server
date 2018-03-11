@@ -9,7 +9,6 @@ public class ErrorException extends RuntimeException implements BaseException {
     private int errorCode = 2;
     private String errorMessage = "系统异常";
     private Object errorResult;
-//    private Exception e;
 
     public ErrorException(){
     }

@@ -27,10 +27,6 @@ public class PackageResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 	@Value("${jeecode.packageResponseBody:true}")
 	boolean packageResponseBody;
 
-	/**
-	 * 全局处理Exception
-	 * @return
-	 */
 	@ExceptionHandler
 	@PackageResponseBody(false)
 	public void handleExceptions(final Exception e, HandlerMethod handlerMethod, HttpServletResponse response) throws Exception {
@@ -76,10 +72,6 @@ public class PackageResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 		return true;
 	}
 
-	/**
-	 * 返回对象转为 SimpleResultBody
-	 * # 字符串不进行转换，如需转换须在controller方法返回手动调用 ResultBodyUtils.getSuccessSimpleResultBody(strResult)
-     */
 	@Override
 	public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
 								  Class<? extends HttpMessageConverter<?>> selectedConverterType,

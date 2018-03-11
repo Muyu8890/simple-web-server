@@ -13,10 +13,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-/**
- * 对象工具类
- * Created by 刘少年 on 2017/8/9.
- */
 public class EntityUtils {
 
     public static Object getValue(Object source, Field field) {
@@ -89,14 +85,6 @@ public class EntityUtils {
         return getTableFieldList(entityClass.getSuperclass(), fieldList);
     }
 
-
-    /**
-     * 获取主键属性
-     *
-     * @param entityClass 业务实体类
-     * @return 主键属性
-     * @ {@inheritDoc}
-     */
     public static Field getIdField(Class<?> entityClass) {
         for (Class<?> c = entityClass; c != Object.class; c = c.getSuperclass()) {
             Field[] fields = c.getDeclaredFields();//获得属性
@@ -115,12 +103,6 @@ public class EntityUtils {
     }
 
 
-    /**
-     * 获取实体表名，实体类配有Table注解
-     *
-     * @param entityClass
-     * @return
-     */
     public static String getTableName(Class<?> entityClass) {
         Annotation tableAnnotation = entityClass.getAnnotation(Table.class);
         return ((Table) tableAnnotation).name();
@@ -138,12 +120,6 @@ public class EntityUtils {
         return result;
     }
 
-    /**
-     * 返回一个集合,key是propertyName,value是list遍历出来的对象
-     *
-     * @param propertyName     属性名
-     * @param entityCollection 对象集合
-     */
     public static <T> Map<Object, T> propertyEntityMap(String propertyName, Collection<T> entityCollection) {
         Map<Object, T> result = new HashMap<>();
         if (CollectionUtils.isNotEmpty(entityCollection)) {
@@ -160,14 +136,6 @@ public class EntityUtils {
         return result;
     }
 
-    /**
-     * 返回一个集合,key是propertyName,value是list遍历出来的对象集合
-     *
-     * @param propertyName
-     * @param entityCollection
-     * @param <T>
-     * @return
-     */
     public static <T> Map<Object, Collection<T>> propertyCollectionMap(String propertyName, Collection<T> entityCollection) {
         Map<Object, Collection<T>> result = new HashMap<>();
         if (CollectionUtils.isNotEmpty(entityCollection)) {
@@ -188,17 +156,6 @@ public class EntityUtils {
         return result;
     }
 
-//    public static void main(String[] args) throws NoSuchFieldException {
-//        ManagerPower managerPower = new ManagerPower();
-//        Field field = getField(ManagerPower.class, "childrenList");
-////        System.out.println(field.getType().isAssignableFrom(List.class));
-////        System.out.println(field.getType().isAssignableFrom(Collection.class));
-////        System.out.println(field.getType().isAssignableFrom(ArrayList.class));
-//        System.out.println(List.class.isAssignableFrom(ArrayList.class));
-//        System.out.println(List.class.isAssignableFrom(List.class));
-//        System.out.println(List.class.isAssignableFrom(Collection.class));
-//
-//    }
 
     private static <T, R> void setListToEntity(Collection<T> mainCollection, Collection<R> subCollection,
                                                Field collectionField, Field mainField, Field relationField) throws IllegalAccessException {
@@ -227,17 +184,6 @@ public class EntityUtils {
         }
     }
 
-    /**
-     * 设置对象的集合子对象
-     *
-     * @param mainCollection
-     * @param subCollection
-     * @param collectionProperty
-     * @param mainProperty
-     * @param relationProperty
-     * @param <T>
-     * @param <R>
-     */
     public static <T, R> void setListToEntity(Collection<T> mainCollection, Collection<R> subCollection,
                                               String collectionProperty, String mainProperty, String relationProperty) {
         if (CollectionUtils.isEmpty(mainCollection) || CollectionUtils.isEmpty(subCollection)) {

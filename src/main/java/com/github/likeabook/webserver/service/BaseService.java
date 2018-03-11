@@ -17,16 +17,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
 
-/**
- * 增删改查的service层
- * @Description 校验，整理数据等都在这个类中
- * @version 1.0.0
- * 
- * @author 刘加胜
- * @date 2014-9-29
- * 
- */
-//@Service("baseService")
 @Transactional
 public class BaseService<T, M extends BaseMapper<T>> {
 	private static Logger logger = Logger.getLogger(BaseService.class);
@@ -87,12 +77,6 @@ public class BaseService<T, M extends BaseMapper<T>> {
         return getMapper().saveBatch(param);
     }
 
-    /**
-     * 保存或更新，根据id判断，若不存在则新增，存在则更新
-     * 更新操作会更新entity所有字段
-     * @param entity
-     * @return
-     */
     public int saveOrUpdate(T entity){
         Object idValue = EntityUtils.getIdValue(entity);
         if (idValue == null) {
@@ -103,12 +87,6 @@ public class BaseService<T, M extends BaseMapper<T>> {
         }
     }
 
-    /**
-     * 保存或更新，根据id判断，若不存在则新增，存在则更新
-     * 更新操作不包含非空字段
-     * @param entity
-     * @return
-     */
     public int saveOrUpdateNotNull(T entity){
         Object idValue = EntityUtils.getIdValue(entity);
         if (idValue == null) {
@@ -118,20 +96,10 @@ public class BaseService<T, M extends BaseMapper<T>> {
             return updateNotNull(entity);
         }
     }
-    /**
-     * 更新操作会更新entity所有字段
-     * @param entity
-     * @return
-     */
-	public int update(T entity) {
+    public int update(T entity) {
 		return getMapper().update(entity);
 	}
-    /**
-     * 更新操作不包含非空字段
-     * @param entity
-     * @return
-     */
-	public int updateNotNull(T entity) {
+    public int updateNotNull(T entity) {
 		return getMapper().updateNotNull(entity);
 	}
     public void delete(T entity) {

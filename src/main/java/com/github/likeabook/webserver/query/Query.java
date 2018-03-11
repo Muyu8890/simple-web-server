@@ -2,11 +2,6 @@ package com.github.likeabook.webserver.query;
 
 import java.util.*;
 
-/**
- * 查询参数类
- * 复杂查询参数类
- * Created by 刘少年 on 2017/8/9.
- */
 public class Query {
 
     protected Integer pageNo;
@@ -31,52 +26,27 @@ public class Query {
     }
 
 
-    /**
-     * 添加where条件
-     * @param where 条件字符串
-     * @return
-     */
     public Query addWhere(String where){
         whereList.add(where);
         return this;
     }
 
-    /**
-     * 添加in条件
-     * @param column 字段名
-     * @param param 集合
-     * @return
-     */
     public Query addIn(String column, Collection param){
         inList.add(new InCondition(column, param));
         return this;
     }
 
-    /**
-     * 添加排序
-     * @param columns 字段名，可以多个字段","分割
-     * @return
-     */
     public Query addOrderBy(String columns){
         orderByList.add(columns);
         return this;
     }
 
-    /**
-     * 添加分组
-     * @param columns 字段名，可以多个字段","分割
-     * @return
-     */
     public Query addGroupBy(String columns){
         groupBy = columns;
         return this;
     }
 
 
-    /**
-     * 添加表关联
-     * @return
-     */
     public Query addJoin(JoinType joinType,
                          String tableNameAndOnConditions){
         joinList.add(new Join(joinType, tableNameAndOnConditions));

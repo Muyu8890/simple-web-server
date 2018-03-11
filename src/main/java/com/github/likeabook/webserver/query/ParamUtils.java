@@ -5,10 +5,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * mybatis查询参数工具类
- * Created by 刘少年 on 2017/8/17.
- */
 public class ParamUtils {
 
     public static final String QUERY_OBJECT = "_queryObject_";
@@ -16,7 +12,7 @@ public class ParamUtils {
     public static final String IN_CONDITION = "_inCondition_";
 
     public static Query setPageInfo(Query query) {
-        // 从session中取 TODO
+
         if (query.pageNo == null) {
             query.pageNo = 1;
         }

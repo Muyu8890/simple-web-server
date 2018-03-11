@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  * 将条件转换为sql
- * Created by 刘少年 on 2017/8/18.
  */
 public class SqlUtils {
 
@@ -30,12 +29,6 @@ public class SqlUtils {
     }
 
 
-    /**
-     * 拼接select和from部分
-     * @param entityClass
-     * @param query
-     * @return
-     */
     public static String getSelectAndFrom(Class entityClass, Query query){
         String columns = "t.*";
         if (query != null && CollectionUtils.isNotEmpty(query.selectColumnList)){
@@ -63,12 +56,6 @@ public class SqlUtils {
 
 
 
-    /**
-     * 拼接where条件
-     * @param entityCondition 对象查询条件，属性不为空拼接到条件中
-     * @param query
-     * @return
-     */
     public static String getWhere(Object entityCondition, Query query){
         StringBuffer resultBuffer = new StringBuffer(" where 1=1 ");
         if (entityCondition != null) {
