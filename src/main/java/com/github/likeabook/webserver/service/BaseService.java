@@ -17,14 +17,11 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
 
-@Transactional
-public class BaseService<T, M extends BaseMapper<T>> {
+public abstract class BaseService<T, M extends BaseMapper<T>> {
 	private static Logger logger = Logger.getLogger(BaseService.class);
-    @Resource
-    private M baseMapper;
-    public  M getMapper(){
-	    return baseMapper;
-    }
+
+    public abstract M getMapper();
+
 	public int save(T entity) {
         List<T> entityList = new ArrayList<>();
         entityList.add(entity);

@@ -8,16 +8,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by 刘少年 on 2017/8/8.
- */
-@Mapper
 public interface BaseMapper<T> {
 
     @InsertProvider(type = BaseMapperProvider.class, method = "saveBatch")
     int saveBatch(Map<String, Object> param);
-//    void saveBatch(Collection<T> entityCollection);
-//    void saveBatch(@Param("entityCollection") Collection<T> entityCollection);
 
     @UpdateProvider(type = BaseMapperProvider.class, method = "update")
     int update(T entity);
