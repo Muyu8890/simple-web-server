@@ -13,12 +13,12 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public abstract class BaseService<T, M extends BaseMapper<T>> {
+public abstract class BaseService<T> {
 	private static Logger logger = Logger.getLogger(BaseService.class);
 
-    private M mapper;
+    private BaseMapper mapper;
     // 如果子类中没有getMapper方法会调用baseService中的getMapper方法，在这个方法中直接获取mapper属性
-    public  M getMapper(){
+    public  <M extends BaseMapper<T>>M getMapper(){
         if (mapper == null) {
             Field mapperField = EntityUtils.getField(this.getClass(), "mapper");
             mapper = (M)EntityUtils.getValue(this, mapperField);
@@ -27,7 +27,7 @@ public abstract class BaseService<T, M extends BaseMapper<T>> {
         if (mapper == null) {
             throw new ErrorException(CoreExceptionEnum.CODE_85);
         }
-        return mapper;
+        return (M)mapper;
     }
 
 	public int save(T entity) {
