@@ -2,9 +2,7 @@ package com.github.likeabook.webserver.result;
 
 import com.github.likeabook.webserver.exception.BaseException;
 
-/**
- * Created by 刘少年 on 2016/11/25.
- */
+
 public class ResultBodyUtils {
     public static SimpleResultBody getSuccessSimpleResultBody() {
         return getSuccessSimpleResultBody(null);

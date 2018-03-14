@@ -1,9 +1,6 @@
 package com.github.likeabook.webserver.exception;
 
-/**
- * @author 刘加胜
- * 2015年10月12日
- */
+
 public class ErrorException extends RuntimeException implements BaseException {
     private Enum errorEnum;
     private int errorCode = 2;

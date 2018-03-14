@@ -1,8 +1,5 @@
 package com.github.likeabook.webserver.exception;
 
-/**
- * Created by 刘少年 on 2016/11/24.
- */
 public class ExceptionUtils {
     static void setExceptionParam(BaseException baseException, Enum errorEnum){
         baseException.setErrorCode(Integer.parseInt(errorEnum.name().split("_")[1]));

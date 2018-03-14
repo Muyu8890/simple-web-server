@@ -9,9 +9,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 将条件转换为sql
- */
 public class SqlUtils {
 
 

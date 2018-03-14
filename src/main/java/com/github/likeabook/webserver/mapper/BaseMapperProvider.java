@@ -13,9 +13,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
 
-/**
- * Created by 刘少年 on 2017/8/8.
- */
 public class BaseMapperProvider {
 
     public String get(Map paramMap) {

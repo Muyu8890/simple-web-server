@@ -1,8 +1,6 @@
 package com.github.likeabook.webserver.result;
 
-/**
- * 默认的JSON结果体
- */
+
 public class SimpleResultBody {
     // 结果编码
     private int errorCode = 0;

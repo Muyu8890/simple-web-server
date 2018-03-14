@@ -1,10 +1,8 @@
 package com.github.likeabook.webserver.mapper;
 
-import com.github.likeabook.webserver.query.Query;
 import org.apache.ibatis.annotations.*;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 

@@ -1,10 +1,6 @@
 package com.github.likeabook.webserver.exception;
 
-/**
- * 业务异常的基础类
- * @author 刘加胜
- * 2015年10月12日
- */
+
 public class BusinessRuntimeException extends RuntimeException implements BaseException {
 
     private Enum errorEnum;
