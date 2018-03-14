@@ -10,6 +10,7 @@ public enum CoreExceptionEnum {
     CODE_82("设置集合异常"),
     CODE_83("{0}不是集合属性"),
     CODE_84("设置id值异常"),
+    CODE_85("service中没有覆盖getMapper方法也没有mapper字段"),
     ;
 
     public String message;

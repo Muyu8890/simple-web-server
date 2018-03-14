@@ -9,10 +9,6 @@ import com.github.likeabook.webserver.query.ParamUtils;
 import com.github.likeabook.webserver.util.EntityUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -20,7 +16,19 @@ import java.util.*;
 public abstract class BaseService<T, M extends BaseMapper<T>> {
 	private static Logger logger = Logger.getLogger(BaseService.class);
 
-    public abstract M getMapper();
+    private M mapper;
+    // 如果子类中没有getMapper方法会调用baseService中的getMapper方法，在这个方法中直接获取mapper属性
+    public  M getMapper(){
+        if (mapper == null) {
+            Field mapperField = EntityUtils.getField(this.getClass(), "mapper");
+            mapper = (M)EntityUtils.getValue(this, mapperField);
+        }
+        // 没有覆盖getMapper方法，也没有mapper字段，抛出异常
+        if (mapper == null) {
+            throw new ErrorException(CoreExceptionEnum.CODE_85);
+        }
+        return mapper;
+    }
 
 	public int save(T entity) {
         List<T> entityList = new ArrayList<>();
