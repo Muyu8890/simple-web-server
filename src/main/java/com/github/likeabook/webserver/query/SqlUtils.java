@@ -35,8 +35,8 @@ public class SqlUtils {
     }
 
     public static String getSelectCountAndFrom(Class entityClass){
-        String idField = EntityUtils.getIdField(entityClass).getName();
-        return "select count(" + idField + ") from " + EntityUtils.getTableName(entityClass) + " t ";
+        // TODO count(*),count(1),count(id)
+        return "select count(1) from " + EntityUtils.getTableName(entityClass) + " t ";
     }
 
 
