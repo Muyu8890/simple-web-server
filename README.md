@@ -29,3 +29,6 @@
 	6.无侵入性，随意集成其他第三方插件
 
 
+### 计划中未实现功能
+	1.在新增时自动注入BaseEntity中的creatorId、creatorName、createTime
+	2.在修改和逻辑删除是自动注入BaseEntity中的modifierId、modifierName、modifyTime
