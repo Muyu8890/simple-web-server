@@ -1,34 +1,46 @@
 package com.github.likeabook.webserver.util;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Proxy;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class ClassUtils {
 
+    static {
+        System.out.println(ClassUtils.class.getClassLoader() + "22222222222222222222222222222222222222");
+    }
+    public enum ClassType {
+        ENUM,
+        INTERFACE,
+        ANNOTATION,
+    }
 
-    public static List<Class<?>> getClassesByAnnotation(String packageName, Class<?> annotationType) {
-        List<Class<?>> allClasses = getClasses(packageName);
+    public static List<Class<?>> getClassesByAnnotation(ClassLoader classLoader, String packageName, Class<?> annotationType, ClassType... classTypes) {
+        System.out.println(classLoader + "333333333333333333333333333333");
+        List<Class<?>> allClasses = getClasses(classLoader, packageName, classTypes);
         List<Class<?>> result = new ArrayList<>();
         if (CollectionUtils.isEmpty(allClasses)) {
             return result;
         }
         for (Class clazz : allClasses) {
-            Annotation annotation = clazz.getAnnotation(annotationType);
-            if (annotation != null){
+            if(clazz.getAnnotation(annotationType) != null) {
                 result.add(clazz);
             }
+//            Annotation annotation = (Annotation) getAnnotation(clazz, annotationType);
+//            if (annotation != null) {
+//                result.add(clazz);
+//            }
         }
         return result;
     }
@@ -37,10 +49,11 @@ public class ClassUtils {
      * 从包package中获取所有的Class
      *
      */
-    private static List<Class<?>> getClasses(String packageName) {
+    private static List<Class<?>> getClasses(ClassLoader classLoader, String packageName, ClassType... classTypes) {
 
+        Set<ClassType> classTypeSet = new HashSet<>(Arrays.asList(classTypes));
         // 第一个class类的集合
-        List<Class<?>> classes = new ArrayList<Class<?>>();
+        List<Class<?>> classList = new ArrayList<Class<?>>();
         // 是否循环迭代
         boolean recursive = true;
         // 获取包的名字 并进行替换
@@ -48,7 +61,12 @@ public class ClassUtils {
         // 定义一个枚举的集合 并进行循环来处理这个目录下的things
         Enumeration<URL> dirs;
         try {
-            dirs = Thread.currentThread().getContextClassLoader().getResources(packageDirName);
+//            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+//            ClassLoader classLoader = Object.class.getClassLoader();
+//            while (classLoader.getParent() != null) {
+//                classLoader = classLoader.getParent();
+//            }
+            dirs = classLoader.getResources(packageDirName);
             // 循环迭代下去
             while (dirs.hasMoreElements()) {
                 // 获取下一个元素
@@ -60,7 +78,7 @@ public class ClassUtils {
                     // 获取包的物理路径
                     String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
                     // 以文件的方式扫描整个包下的文件 并添加到集合中
-                    findAndAddClassesInPackageByFile(packageName, filePath, recursive, classes);
+                    findAndAddClassesInPackageByFile(classLoader, packageName, filePath, recursive, classList, classTypeSet);
                 } else if ("jar".equals(protocol)) {
                     // 如果是jar包文件
                     // 定义一个JarFile
@@ -96,7 +114,9 @@ public class ClassUtils {
                                         String className = name.substring(packageName.length() + 1, name.length() - 6);
                                         try {
                                             // 添加到classes
-                                            classes.add(Class.forName(packageName + '.' + className));
+
+                                            Class clazz = Class.forName(packageName + '.' + className, true, classLoader);
+                                            addClassListByClassType(classLoader, classList, clazz, classTypeSet);
                                         } catch (ClassNotFoundException e) {
                                             e.printStackTrace();
                                         }
@@ -113,14 +133,14 @@ public class ClassUtils {
             e.printStackTrace();
         }
 
-        return classes;
+        return classList;
     }
 
     /**
      * 以文件的形式来获取包下的所有Class
      *
      */
-    private static void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive, List<Class<?>> classes) {
+    private static void findAndAddClassesInPackageByFile(ClassLoader classLoader, String packageName, String packagePath, final boolean recursive, List<Class<?>> classList, Set<ClassType> classTypeSet) {
         // 获取此包的目录 建立一个File
         File dir = new File(packagePath);
         // 如果不存在或者 也不是目录就直接返回
@@ -138,17 +158,33 @@ public class ClassUtils {
         for (File file : dirfiles) {
             // 如果是目录 则继续扫描
             if (file.isDirectory()) {
-                findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
+                findAndAddClassesInPackageByFile(classLoader,packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classList, classTypeSet);
             } else {
                 // 如果是java类文件 去掉后面的.class 只留下类名
                 String className = file.getName().substring(0, file.getName().length() - 6);
                 try {
                     // 添加到集合中去
-                    classes.add(Class.forName(packageName + '.' + className));
+                    Class clazz = Class.forName(packageName + '.' + className, true, classLoader);
+//                    Class clazz = Class.forName(packageName + '.' + className);
+                    addClassListByClassType(classLoader, classList, clazz, classTypeSet);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    static void addClassListByClassType(ClassLoader classLoader, List<Class<?>> classList, Class clazz, Set<ClassType> classTypeSet) {
+        if (CollectionUtils.isNotEmpty(classTypeSet)) {
+            if (classTypeSet.contains(ClassType.ENUM) && clazz.isEnum()) {
+                classList.add(clazz);
+            } else if (classTypeSet.contains(ClassType.INTERFACE) && clazz.isInterface()) {
+                classList.add(clazz);
+            } else if (classTypeSet.contains(ClassType.ANNOTATION) && clazz.isAnnotation()) {
+                classList.add(clazz);
+            }
+        } else {
+            classList.add(clazz);
         }
     }
 

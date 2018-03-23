@@ -88,6 +88,20 @@ public class SqlUtils {
                 }
             });
 
+            // query.notInCondition
+            query.notInList.forEach(notInCondition -> {
+                if (CollectionUtils.isNotEmpty(notInCondition.param)) {
+                    // #{_notInCondition_.t__userId[0]}, #{_notInCondition_.t__userId[1]}
+                    String column = notInCondition.column.replaceAll("\\.", "__");
+                    List<String> notInParamList = new ArrayList<>();
+                    for (int i=0; i<notInCondition.param.size(); i++) {
+                        notInParamList.add("#{" + ParamUtils.NOT_IN_CONDITION + "." + column + "[" + i + "]}");
+                    }
+                    String inSql = " and " + notInCondition.column + " not in (" + StringUtils.join(notInParamList.toArray(), ", ") + ") ";
+                    resultBuffer.append(inSql);
+                }
+            });
+
         }
         return resultBuffer.toString();
     }

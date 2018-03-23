@@ -10,6 +10,7 @@ public class ParamUtils {
     public static final String QUERY_OBJECT = "_queryObject_";
     public static final String ENTITY_CONDITION = "_entityCondition_";
     public static final String IN_CONDITION = "_inCondition_";
+    public static final String NOT_IN_CONDITION = "_notInCondition_";
 
     public static Query setPageInfo(Query query) {
 
@@ -45,6 +46,18 @@ public class ParamUtils {
                     }
                 }
                 param.put(ParamUtils.IN_CONDITION, inParamMap);
+            });
+            // notInCondition
+            Map<String, Object[]> notInParamMap = new HashMap<>();
+            query.inList.forEach(notInCondition -> {
+                // #{_notInCondition_.t__userId[0]}, #{_notInCondition_.t__userId[1]}
+                String column = notInCondition.column.replaceAll("\\.", "__");
+                for (int i=0; i<notInCondition.param.size(); i++) {
+                    if (CollectionUtils.isNotEmpty(notInCondition.param)) {
+                        notInParamMap.put(column, notInCondition.param.toArray());
+                    }
+                }
+                param.put(ParamUtils.NOT_IN_CONDITION, notInParamMap);
             });
         }
         return param;
