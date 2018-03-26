@@ -17,9 +17,6 @@ import java.util.jar.JarFile;
 
 public class ClassUtils {
 
-    static {
-        System.out.println(ClassUtils.class.getClassLoader() + "22222222222222222222222222222222222222");
-    }
     public enum ClassType {
         ENUM,
         INTERFACE,
@@ -27,7 +24,6 @@ public class ClassUtils {
     }
 
     public static List<Class<?>> getClassesByAnnotation(ClassLoader classLoader, String packageName, Class<?> annotationType, ClassType... classTypes) {
-        System.out.println(classLoader + "333333333333333333333333333333");
         List<Class<?>> allClasses = getClasses(classLoader, packageName, classTypes);
         List<Class<?>> result = new ArrayList<>();
         if (CollectionUtils.isEmpty(allClasses)) {
