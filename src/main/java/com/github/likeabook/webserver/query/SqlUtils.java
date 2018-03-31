@@ -5,8 +5,10 @@ import com.github.likeabook.webserver.util.EntityUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.persistence.Column;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class SqlUtils {
@@ -25,11 +27,38 @@ public class SqlUtils {
 
     }
 
-
+    private static LinkedHashSet<String> getSelectColumnSet(Class<?> entityClass, final String aliasName) {
+        LinkedHashSet<String> columnSet = new LinkedHashSet<>();
+        List<Field> fieldList = EntityUtils.getTableFieldList(entityClass);
+        fieldList.forEach(field -> {
+            field.setAccessible(true);
+            Column columnAnnotation = field.getAnnotation(Column.class);
+            if (columnAnnotation != null && StringUtils.isNotEmpty(columnAnnotation.name())) {
+                String annotationName = aliasName + "." + columnAnnotation.name();
+                columnSet.add(annotationName);
+                columnSet.add(annotationName + " as " + field.getName());
+            } else {
+                columnSet.add(aliasName + "." + field.getName());
+            }
+        });
+        return columnSet;
+    }
     public static String getSelectAndFrom(Class entityClass, Query query){
-        String columns = "t.*";
+        String columns;
         if (query != null && CollectionUtils.isNotEmpty(query.selectColumnList)){
             columns = StringUtils.join(query.selectColumnList.toArray(), ", ");
+        } else {
+            LinkedHashSet<String> columnSet = getSelectColumnSet(entityClass, "t");
+            StringBuilder columnSb = new StringBuilder();
+            int i = 0;
+            for (String column : columnSet) {
+                i++;
+                columnSb.append(column);
+                if (i < columnSet.size()) {
+                    columnSb.append(", ");
+                }
+            }
+            columns = columnSb.toString();
         }
         return "select " + columns + " from " + EntityUtils.getTableName(entityClass) + " t ";
     }
@@ -60,8 +89,16 @@ public class SqlUtils {
             List<Field> fieldList = EntityUtils.getTableFieldList(entityCondition.getClass());
             for (Field field : fieldList) {
                 Object value = EntityUtils.getValue(entityCondition, field);
+                field.setAccessible(true);
+                Column columnAnnotation = field.getAnnotation(Column.class);
+                String columnName;
+                if (columnAnnotation != null && StringUtils.isNotEmpty(columnAnnotation.name())) {
+                    columnName = columnAnnotation.name();
+                } else {
+                    columnName = field.getName();
+                }
                 if (value != null) {
-                    where += " and t." + field.getName() + " = #{" + ParamUtils.ENTITY_CONDITION + "." + field.getName() + "}";
+                    where += " and t." + columnName + " = #{" + ParamUtils.ENTITY_CONDITION + "." + field.getName() + "}";
                 }
             }
             resultBuffer.append(where);
