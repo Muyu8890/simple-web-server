@@ -104,8 +104,11 @@ public class EntityUtils {
 
 
     public static String getTableName(Class<?> entityClass) {
-        Annotation tableAnnotation = entityClass.getAnnotation(Table.class);
-        return ((Table) tableAnnotation).name();
+        Table tableAnnotation = entityClass.getAnnotation(Table.class);
+        if (tableAnnotation == null || StringUtils.isEmpty(tableAnnotation.name())) {
+            return entityClass.getSimpleName();
+        }
+        return tableAnnotation.name();
     }
 
 

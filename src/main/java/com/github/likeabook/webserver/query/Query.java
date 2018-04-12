@@ -9,7 +9,8 @@ public class Query {
 
     final protected List<String> selectColumnList = new ArrayList<>();
     final protected List<String> whereList = new ArrayList<>();
-    final protected List<InCondition> inList = new ArrayList<>(); // TODO
+    final public List<InCondition> inList = new ArrayList<>(); // TODO
+    final protected List<InCondition> notInList = new ArrayList<>(); // TODO
     final protected List<String> orderByList = new ArrayList<>();
     protected String groupBy = "";
     final protected List<Join> joinList = new ArrayList<>();
@@ -33,6 +34,21 @@ public class Query {
 
     public Query addIn(String column, Collection param){
         inList.add(new InCondition(column, param));
+        return this;
+    }
+
+    public Query addIn(String column, Object... params){
+        inList.add(new InCondition(column, Arrays.asList(params)));
+        return this;
+    }
+
+    public Query addNotIn(String column, Collection param){
+        notInList.add(new InCondition(column, param));
+        return this;
+    }
+
+    public Query addNotIn(String column, Object... params){
+        notInList.add(new InCondition(column, Arrays.asList(params)));
         return this;
     }
 
@@ -94,9 +110,9 @@ public class Query {
     /**
      * in查询条件
      */
-    protected class InCondition{
+    public class InCondition{
         protected String column;
-        protected Collection param;
+        public Collection param;
 
         public InCondition(String column, Collection param) {
             this.column = column;

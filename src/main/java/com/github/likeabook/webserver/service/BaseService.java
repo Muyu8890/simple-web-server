@@ -114,6 +114,9 @@ public abstract class BaseService<T> {
         // TODO
     }
     public void logicDelete(T entityCondition, Query query) {
+        if (isInEmpty(query)) {
+            return;
+        }
         getMapper().logicDelete(ParamUtils.getParamMap(entityCondition, query));
     }
     public void logicDelete(T entityCondition) {
@@ -129,21 +132,33 @@ public abstract class BaseService<T> {
         return find(entityCondition, null);
     }
     public T find(T entityCondition, Query query) {
+        if (isInEmpty(query)) {
+            return null;
+        }
         return getMapper().find(ParamUtils.getParamMap(entityCondition, query));
     }
     public List<T> findList(T entityCondition) {
         return findList(entityCondition, null);
     }
     public List<T> findList(T entityCondition, Query query) {
+        if (isInEmpty(query)) {
+            return new ArrayList<>();
+        }
         return getMapper().findList(ParamUtils.getParamMap(entityCondition, query));
     }
     public int count(T entityCondition) {
         return count(entityCondition, null);
     }
     public int count(T entityCondition, Query query) {
+        if (isInEmpty(query)) {
+            return 0;
+        }
         return getMapper().count(ParamUtils.getParamMap(entityCondition, query));
     }
     public Page<T> findPage(T entityCondition, Query query) {
+        if (isInEmpty(query)) {
+            return new Page<>(query.getPageNo(), query.getPageSize(), 0, new ArrayList<>());
+        }
 	    // 设置页数页码
         ParamUtils.setPageInfo(query);
         Map<String, Object> paramMap = ParamUtils.getParamMap(entityCondition, query);
@@ -158,4 +173,17 @@ public abstract class BaseService<T> {
 		return page;
 	}
 
+
+	private boolean isInEmpty(Query query){
+        if(query == null) {
+            return false;
+        }
+        for (Query.InCondition inCondition : query.inList) {
+            if (CollectionUtils.isEmpty(inCondition.param)) {
+                logger.info("query中存在in为空，不进行数据库操作！");
+                return true;
+            }
+        }
+        return false;
+    }
 }

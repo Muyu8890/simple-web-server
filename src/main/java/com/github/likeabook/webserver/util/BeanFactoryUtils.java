@@ -22,14 +22,23 @@ public class BeanFactoryUtils implements BeanFactoryAware {
 	}
 
 	public static <T> T getBean(Class<T> clazz) {
+		if (beanFactory == null) {
+			return null;
+		}
 		return beanFactory.getBean(clazz);
 	}
 
 	public static Object getBean(String beanName) {
+		if (beanFactory == null) {
+			return null;
+		}
 		return beanFactory.getBean(beanName);
 	}
 
 	public static <T> T getBean(String beanName, Class<T> clazz) {
+		if (beanFactory == null) {
+			return null;
+		}
 		return beanFactory.getBean(beanName, clazz);
 	}
 
